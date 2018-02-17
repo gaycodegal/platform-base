@@ -20,20 +20,29 @@ const player = new Player(map,
 screen.drawlist.push(map);
 screen.drawlist.push(player);
 
-async function main(){
-    let dt = 1/60;
+let testmode = false;
+async function main(frames){
+    let dt = 16;
     let last = Date.now(), now = 0;
-    while(true){
+    while(!testmode || frames > 0){
+	frames--;
 	await nextFrame();
-	now = Date.now();
-	dt = now - last;
-	last = now;
+	
+	if(!testmode){
+	    now = Date.now();
+	    dt = now - last;
+	    last = now;
+	}
 	//console.log(1 / (dt/1000));
 	player.step(dt);
 	screen.draw();
 	
     }
+    console.log("done");
 }
 
-main();
+//main();
 
+//floortest();
+
+walltest();

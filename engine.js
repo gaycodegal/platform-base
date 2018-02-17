@@ -61,10 +61,10 @@ Player.prototype.draw = function(ctx){
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
     /*ctx.fillStyle = "rgba(0,255,0,0.5)";
-    const sx = this.testing.sx < 0 ? 16 : 0;
-    const sy = this.testing.sy < 0 ? 16 : 0;
-    ctx.fillRect(this.testing.nxp, this.testing.ny, this.w, this.h * 2);
-    ctx.fillRect(this.testing.nx, this.testing.nyp, this.w * 2, this.h);*/
+    let sx = player.testing.sx < 0 ? 16 : 0;
+    let sy = player.testing.sy < 0 ? 16 : 0;
+    ctx.fillRect(player.testing.nxp, player.testing.ny, player.w, player.h * 2);
+    ctx.fillRect(player.testing.nx, player.testing.nyp, player.w * 2, player.h);*/
     ctx.restore();
 };
 
@@ -88,7 +88,7 @@ Player.prototype.step = function(dt){
     //delta movement for this frame
     let dx = dt * this.dx;
     let dy = dt * this.dy;
-
+    //console.log(dx, dy);
     //maximum we can actually move without breaking
     //the maths. However, we don't coordinate,
     //so we *might* get weird behaviours
@@ -106,8 +106,9 @@ Player.prototype.step = function(dt){
     const yp = ryp | 0;
     rxp -= xp;
     ryp -= yp;
-    const nxp = sx == 1 ? xp + sx : nx / TILE_SIZE | 0;
-    const nyp = sy == 1 ? yp + sy : ny / TILE_SIZE | 0;
+    //this appears to be the source of clipping. xp + sx and yp + sy don't quite do the trick
+    const nxp = nx / TILE_SIZE | 0;
+    const nyp = ny / TILE_SIZE | 0;
     this.testing.nxp = nxp * TILE_SIZE;
     this.testing.nyp = nyp * TILE_SIZE;
     this.testing.nx = xp * TILE_SIZE;
@@ -115,22 +116,33 @@ Player.prototype.step = function(dt){
     
     const distx = (nxp * TILE_SIZE - this.x) * sx;
     const disty = (nyp * TILE_SIZE - this.y) * sy;
-    const mainx = this.map.tiles[nxp][yp],
-	  mainy = this.map.tiles[xp][nyp];
-
-    if(mainx || (ryp != 0 && distx >= disty && !mainy && this.map.tiles[nxp][nyp])){
+    const distdiagx = distx + sx * TILE_SIZE,
+	  distdiagy = disty + sy * TILE_SIZE;
+    const center = this.map.tiles[nxp][nyp],
+	  mainx = this.map.tiles[nxp + sx][nyp],
+	  mainy = this.map.tiles[nxp][nyp + sy],
+	  diagonal = this.map.tiles[nxp + sx][nyp + sy];
+    
+    if((distx >= disty && center) || (sx == 1 && mainx) || (ryp != 0 && distdiagx >= distdiagy && diagonal)){
+	//console.log(distx >= disty && center, mainx, ryp != 0 && distdiagx >= distdiagy && diagonal);
 	if(dx != 0)
 	    this.gnd = this.mj;
-	nx = (xp) * TILE_SIZE;
+	nx = (nxp) * TILE_SIZE;
 	this.dx = 0;
+    }
+    if(1){
     }
     
     //slight issue - player can clip into ground for a frame
-    if(mainy || (rxp != 0 && disty >= distx && !mainx && this.map.tiles[nxp][nyp])){
+    if((disty >= distx && center) || (sy == 1 && mainy) || (rxp != 0 && distdiagy >= distdiagx && diagonal)){
+	console.log((disty >= distx && center), mainy, distdiagy >= distdiagx && diagonal);
 	if(sy == 1)
 	    this.gnd = this.mj;
-	ny = (yp) * TILE_SIZE;
+	ny = (nyp) * TILE_SIZE;
 	this.dy = 0;
+    }
+    if(1){
+
     }
     this.x = nx;
     this.y = ny;
