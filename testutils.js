@@ -56,9 +56,46 @@ async function walltest(){
     testmode = true;
     await main(5);
     player.jump();
+    await main(2);
+    var last = Point.fromPoint(player);
+    await main(1);
+    var ctx = screen.ctx;
+    ctx.save();
+    ctx.fillStyle = "blue";
+    ctx.fillRect(last.x,last.y,TILE_SIZE, TILE_SIZE);
+    ctx.fillStyle = "rgba(0,255,0,0.5)";
+
+    //drawSquare(player, "rgba(0,255,255, 0.5)");
+    ctx.restore()
+}
+
+function slowNext(delay){
+    return function later() {
+	return new Promise(function(resolve) {
+	    setTimeout(resolve, delay);
+	});
+    };
+};
+
+async function floortest2(){
+    nextFrame = slowNext(100);
+    testmode = true;
+    await main(5);
+    //player.jump();
+    player.dx = .9;
+    await main(7);
+    player.dx = 0;
+    //player.jump();
+    await main(30);
+    var x = 2;
+    while(x--){
+	player.jump();
+	await main(20);
+    }
+    player.jump();
     await main(1);
     var last = Point.fromPoint(player);
-    await main(2);
+    await main(1);
     var ctx = screen.ctx;
     ctx.save();
     ctx.fillStyle = "blue";
