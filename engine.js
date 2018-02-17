@@ -44,6 +44,7 @@ function Player(map, stats){
     this.mdy = stats.maxDy;
     this.w = TILE_SIZE;
     this.h = TILE_SIZE;
+    this.speed = stats.speed
     this.mj = stats.max_jumps;
     this.gnd = this.mj;
     this.testing = {sx: 0, sy: 0, nxp:0, nyp:0, nx:0, ny:0};
@@ -148,10 +149,10 @@ function onkeydown (e){
     }
 
     if(key == 37){
-	player.dx = -0.3;
+	player.dx = -player.speed;
     }
     if(key == 39){
-	player.dx = 0.3;
+	player.dx = player.speed;
     }
 
 }
