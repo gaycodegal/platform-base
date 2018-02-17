@@ -59,11 +59,11 @@ Player.prototype.draw = function(ctx){
     ctx.save();
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
-    ctx.fillStyle = "rgba(0,255,0,0.5)";
+    /*ctx.fillStyle = "rgba(0,255,0,0.5)";
     const sx = this.testing.sx < 0 ? 16 : 0;
     const sy = this.testing.sy < 0 ? 16 : 0;
     ctx.fillRect(this.testing.nxp, this.testing.ny, this.w, this.h * 2);
-    ctx.fillRect(this.testing.nx, this.testing.nyp, this.w * 2, this.h);
+    ctx.fillRect(this.testing.nx, this.testing.nyp, this.w * 2, this.h);*/
     ctx.restore();
 };
 
@@ -111,23 +111,24 @@ Player.prototype.step = function(dt){
     this.testing.nyp = nyp * TILE_SIZE;
     this.testing.nx = xp * TILE_SIZE;
     this.testing.ny = yp * TILE_SIZE;
-    //possibly limit ryp > thresh to only falsying when rxp > 0.5
-    if(this.map.tiles[nxp][yp] || (!this.map.tiles[xp][nyp] && this.map.tiles[nxp][nyp])){
+    
+    const distx = (nxp * TILE_SIZE - this.x) * sx;
+    const disty = (nyp * TILE_SIZE - this.y) * sy;
+    const mainx = this.map.tiles[nxp][yp],
+	  mainy = this.map.tiles[xp][nyp];
+
+    if(mainx || (ryp != 0 && distx >= disty && !mainy && this.map.tiles[nxp][nyp])){
 	this.gnd = this.mj;
 	nx = (xp) * TILE_SIZE;
 	this.dx = 0;
     }
-    //possibly limit rxp > thresh to only falsying when ryp > 0.5
-    if(this.map.tiles[xp][nyp] || (!this.map.tiles[nxp][yp] && this.map.tiles[nxp][nyp])){
+    
+    //slight issue - player can clip into ground for a frame
+    if(mainy || (rxp != 0 && disty >= distx && !mainx && this.map.tiles[nxp][nyp])){
 	if(sy == 1)
 	    this.gnd = this.mj;
 	ny = (yp) * TILE_SIZE;
 	this.dy = 0;
-	if(!this.testing.g)
-	    console.log("gnd");
-	this.testing.g = true;
-    }else{
-	this.testing.g = false;
     }
     this.x = nx;
     this.y = ny;
@@ -144,7 +145,7 @@ function onkeydown (e){
 	player.jump();
 	up_down = true;
     }
-    
+
     if(key == 37){
 	player.dx = -0.3;
     }

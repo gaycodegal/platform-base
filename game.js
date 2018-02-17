@@ -1,7 +1,7 @@
 const screen = new Screen();
 document.body.appendChild(screen.canvas);
 const map = new BasicMap({tiles:genMap(40,30)});
-drawRectMap(map, 10, 10, 5, 1);
+drawRectMap(map, 10, 20, 5, 1);
 const player = new Player(map,
 			  {x:50,
 			   y:50,
