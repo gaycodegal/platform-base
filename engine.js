@@ -118,7 +118,8 @@ Player.prototype.step = function(dt){
 	  mainy = this.map.tiles[xp][nyp];
 
     if(mainx || (ryp != 0 && distx >= disty && !mainy && this.map.tiles[nxp][nyp])){
-	this.gnd = this.mj;
+	if(dx != 0)
+	    this.gnd = this.mj;
 	nx = (xp) * TILE_SIZE;
 	this.dx = 0;
     }
