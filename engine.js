@@ -152,9 +152,7 @@ Player.prototype.step = function (dt){
     }
     this.x = nx;
     this.y = ny;
-    console.log(this.x, this.y);
 };
-
 
 
 function probingstep(dt){
