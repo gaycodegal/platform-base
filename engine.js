@@ -136,8 +136,7 @@ Player.prototype.step = function (dt){
 
     this.testing.probes = [[nxp, nyp], [nxp + sx, nyp], [nxp, nyp + sy], [nxp + sx, nyp + sy]].map(x => new Probe(this.map, x[0] * TILE_SIZE, x[1] * TILE_SIZE));
     
-    if((distx >= disty && center) || mainx || (ryp != 0 && ddistx > ddisty && diagonal)){
-	//console.log(distx >= disty && center, mainx, ryp != 0 && distdiagx >= distdiagy && diagonal);
+    if((distx >= disty && center) || mainx || (!mainy && ryp != 0 && ddistx > ddisty && diagonal)){
 	if(dx != 0)
 	    this.gnd = this.mj;
 	nx = (nxp) * TILE_SIZE;
@@ -146,21 +145,10 @@ Player.prototype.step = function (dt){
     }
 
     
-    //slight issue - player can clip into ground for a frame
-    if((disty >= distx && center) || mainy || (rxp != 0 && ddisty > ddistx && diagonal)){
-	//console.log(dx, dy);
-	if(!center && !mainy && mainx && diagonal){
-	    console.log(center, mainy, mainx, diagonal, rxp != 0 && ddisty > ddistx && diagonal);
-	    console.log(ddistx, ddisty);
-	    console.log(this.x, this.y, nxp * TILE_SIZE, nyp * TILE_SIZE);
-	    console.log(dt,player.dx, player.dy, player.x, player.y);
-	}
+    if((disty >= distx && center) || mainy || (!mainx && rxp != 0 && ddisty > ddistx && diagonal)){
 	this.gnd = this.mj;
 	ny = (nyp) * TILE_SIZE;
 	this.dy = 0;
-    }
-    if(1){
-
     }
     this.x = nx;
     this.y = ny;

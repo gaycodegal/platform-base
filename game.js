@@ -77,6 +77,7 @@ async function main(frames){
     console.log("done");
 }
 bindKeys();
+//testmode = true;
 main();
 //floortest2();
 //floortest();
