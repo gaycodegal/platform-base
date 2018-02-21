@@ -146,7 +146,8 @@ Player.prototype.step = function (dt){
 
     
     if((disty >= distx && center) || mainy || (!mainx && rxp != 0 && ddisty > ddistx && diagonal)){
-	this.gnd = this.mj;
+	if(sy == 1)
+	    this.gnd = this.mj;
 	ny = (nyp) * TILE_SIZE;
 	this.dy = 0;
     }
