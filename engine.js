@@ -60,7 +60,7 @@ Player.prototype.draw = function(ctx){
     ctx.save();
     ctx.fillStyle = "red";
     ctx.fillRect(this.x, this.y, this.w, this.h);
-    this.testing.probes.map(x => x.draw(ctx));
+    //this.testing.probes.map(x => x.draw(ctx));
     ctx.restore();
 };
 
@@ -109,15 +109,14 @@ Player.prototype.step = function (dt){
 	dy = this.mdy * sy;
     
     
-    let nx = this.x + dx;
-    let ny = this.y + dy;
+    let nx = (this.x + dx) | 0;
+    let ny = (this.y + dy) | 0;
     let rxp = this.x / TILE_SIZE;
     let ryp = this.y / TILE_SIZE;
     const xp = rxp | 0;
     const yp = ryp | 0;
     rxp -= xp;
     ryp -= yp;
-    //this appears to be the source of clipping. xp + sx and yp + sy don't quite do the trick
     const nxp = (nx / TILE_SIZE | 0) + (sx == 1 ? 0 : -sx);
     const nyp = (ny / TILE_SIZE | 0) + (sy == 1 ? 0 : -sy);
     this.testing.nxp = nxp * TILE_SIZE;
@@ -134,14 +133,14 @@ Player.prototype.step = function (dt){
 	  mainy = this.map.tiles[nxp][nyp + sy],
 	  diagonal = this.map.tiles[nxp + sx][nyp + sy];
 
-    this.testing.probes = [[nxp, nyp], [nxp + sx, nyp], [nxp, nyp + sy], [nxp + sx, nyp + sy]].map(x => new Probe(this.map, x[0] * TILE_SIZE, x[1] * TILE_SIZE));
+    //this.testing.probes = [[nxp, nyp], [nxp + sx, nyp], [nxp, nyp + sy], [nxp + sx, nyp + sy]].map(x => new Probe(this.map, x[0] * TILE_SIZE, x[1] * TILE_SIZE));
     
     if((distx >= disty && center) || mainx || (!mainy && ryp != 0 && ddistx > ddisty && diagonal)){
 	if(dx != 0)
 	    this.gnd = this.mj;
 	nx = (nxp) * TILE_SIZE;
 
-	this.dx = 0;
+	//this.dx = 0;
     }
 
     
@@ -153,6 +152,7 @@ Player.prototype.step = function (dt){
     }
     this.x = nx;
     this.y = ny;
+    console.log(this.x, this.y);
 };
 
 

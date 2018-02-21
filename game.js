@@ -1,7 +1,7 @@
 const screen = new Screen();
 document.body.appendChild(screen.canvas);
 const map = new BasicMap({tiles:genMap(40,30)});
-drawRectMap(map, 10, 20, 5, 1);
+drawRectMap(map, 10, 22, 5, 1);
 drawRectMap(map, 10, 27, 5, 1);
 //0.4 -0.6699999999999999 591.6 376.0300000000007
 /*
@@ -38,13 +38,13 @@ drawRectMap(map, 10, 27, 5, 1);
 */
 const player = new Player(map,
 
-			  {x:32.000000000000014,
-			   y:338.0000000000003,
+			  {x:144,
+			   y:432,
 			   maxDx:TILE_SIZE - 1,
 			   maxDy:TILE_SIZE - 1,
-			   dx:-0.4,
-			   dy:-0.6800000000000007,
-			   jump_velocity: -0.7,
+			   dx:0,
+			   dy:0,
+			   jump_velocity: -0.67,
 			   max_jumps: 3,
 			   speed: 0.4,
 			   gravity: {x:0, y:0.03},//new Point(),//
